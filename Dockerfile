@@ -1,14 +1,7 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-ARG project_name
-WORKDIR /app
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS node
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-ARG project_folder
-
-COPY ./src .
-ENV NODE_VERSION 16.9.1
-ENV NODE_DOWNLOAD_SHA 1d48c69e4141792f314d29f081501dc22218cfc22f9992c098f7e3f5e0531139
+ENV NODE_VERSION 18.2.0
+ENV NODE_DOWNLOAD_SHA 73d3f98e96e098587c2154dcaa82a6469a510e89a4881663dc4c86985acf245e
 ENV NODE_DOWNLOAD_URL https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz
 
 RUN wget "$NODE_DOWNLOAD_URL" -O nodejs.tar.gz \
@@ -20,17 +13,32 @@ RUN wget "$NODE_DOWNLOAD_URL" -O nodejs.tar.gz \
 	&& apt update \
 	&& apt-get install -y nodejs
 
-RUN dotnet restore "$project_folder"
+FROM node AS build
+WORKDIR /app
+ARG project_folder
 
-WORKDIR "/src/$project_folder"
-RUN dotnet build -c Release -o /app/build
+COPY ./ .
+RUN dotnet restore
+RUN dotnet build -c Release --no-restore 
 
-FROM build AS publish
-RUN dotnet publish -c Release -o /app/publish
+FROM build AS test
+RUN dotnet test -c Release --no-build --logger trx
 
-FROM base AS final
+# Known issue if multiple tests projects complete within the same time down to
+# millisecond difference then the test file will not be uniquely named and will 
+# be overwritten by preceding files with the same name. 
+
+FROM scratch AS test-results
+COPY --from=test /app/tests/**/TestResults/*.trx .
+
+FROM build as publish
+RUN dotnet publish "./src/$project_folder" -c Release --no-build -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+ARG project_name
+WORKDIR /app
 ENV APP_NAME "${project_name}.dll"
 EXPOSE 80
-WORKDIR /app
+EXPOSE 443
 COPY --from=publish /app/publish .
 ENTRYPOINT dotnet "$APP_NAME"
