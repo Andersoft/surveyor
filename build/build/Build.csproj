@@ -5,6 +5,9 @@
     <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Cake.Docker" Version="1.1.2" />
     <PackageReference Include="Cake.Frosting" Version="2.2.0" />
+    <PackageReference Include="Cake.Git" Version="2.0.0" />
+    <PackageReference Include="CliWrap" Version="3.4.4" />
   </ItemGroup>
 </Project>

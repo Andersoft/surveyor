@@ -15,7 +15,7 @@ RUN wget "$NODE_DOWNLOAD_URL" -O nodejs.tar.gz \
 
 FROM node AS build
 WORKDIR /app
-ARG project_folder
+ARG project
 
 COPY ./ .
 RUN dotnet restore
@@ -32,12 +32,12 @@ FROM scratch AS test-results
 COPY --from=test /app/tests/**/TestResults/*.trx .
 
 FROM build as publish
-RUN dotnet publish "./src/$project_folder" -c Release --no-build -o /app/publish
+RUN dotnet publish "./src/$project" -c Release --no-build -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-ARG project_name
+ARG project
 WORKDIR /app
-ENV APP_NAME "${project_name}.dll"
+ENV APP_NAME "${project}.dll"
 EXPOSE 80
 EXPOSE 443
 COPY --from=publish /app/publish .
