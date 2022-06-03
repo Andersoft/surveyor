@@ -35,7 +35,6 @@ FROM build as publish
 RUN dotnet publish "./src/$project" -c Release --no-build -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
-ARG project
 WORKDIR /app
 ENV APP_NAME "${project}.dll"
 EXPOSE 80
