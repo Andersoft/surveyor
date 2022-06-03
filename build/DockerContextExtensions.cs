@@ -29,7 +29,10 @@ public static class DockerContextExtensions
       ? string.Empty
       : $"{options.DockerfileLocation}{ArgumentSeparator}";
 
-    arguments += $"-t {string.Join($"{ArgumentSeparator}-t", options.Tags)}";
+    var tags = string.Join($"{ArgumentSeparator}-t", options.Tags);
+    arguments += string.IsNullOrWhiteSpace(tags)
+      ? string.Empty
+      : $"-t {tags}{ArgumentSeparator}";
 
     var result = await Cli.Wrap(DockerBinaryName)
       .WithWorkingDirectory(options.WorkingDirectory)
