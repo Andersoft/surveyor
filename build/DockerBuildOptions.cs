@@ -6,6 +6,6 @@ public class DockerBuildOptions
   public Dictionary<string, string> BuildArguments { get; internal set; }
   public string OutputDirectory { get; internal set; }
   public string Target { get; internal set; }
-  public string[] Tags { get; internal set; }
+  public IEnumerable<string> Tags { get; internal set; }
   public string DockerfileLocation { get; internal set; }
 }

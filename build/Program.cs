@@ -30,7 +30,10 @@ public class BuildContext : FrostingContext
   {
     ProjectName = context.Arguments.GetArgument("project_name");
     SolutionPath = context.Arguments.GetArgument("solution_path");
+    Tags = context.Arguments.GetArguments("tags");
   }
+
+  public IEnumerable<string> Tags { get; set; }
 }
 
 [TaskName("Clean Solution")]
@@ -42,9 +45,9 @@ public sealed class CleanSolution : FrostingTask<BuildContext>
   }
 }
 
-[TaskName("Build Image")]
+[TaskName("Build Dockerfile")]
 [IsDependentOn(typeof(CleanSolution))]
-public sealed class BuildImage : AsyncFrostingTask<BuildContext>
+public sealed class BuildDockerfile : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
   public override async Task RunAsync(BuildContext context)
@@ -55,7 +58,7 @@ public sealed class BuildImage : AsyncFrostingTask<BuildContext>
       OutputDirectory = "artifacts/test_results",
       Target = "test-results",
       WorkingDirectory = context.SolutionPath,
-      Tags = new[] { "surveyor:latest" },
+      Tags = context.Tags,
       BuildArguments = new Dictionary<string, string>
       {
         ["project"] = context.ProjectName
@@ -70,7 +73,7 @@ public sealed class BuildImage : AsyncFrostingTask<BuildContext>
 }
 
 [TaskName("Publish Application")]
-[IsDependentOn(typeof(BuildImage))]
+[IsDependentOn(typeof(BuildDockerfile))]
 public sealed class PublishApplication : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
@@ -81,7 +84,7 @@ public sealed class PublishApplication : AsyncFrostingTask<BuildContext>
     {
       DockerfileLocation = ".",
       WorkingDirectory = context.SolutionPath,
-      Tags = new[] { "surveyor:latest" },
+      Tags = context.Tags,
       BuildArguments = new Dictionary<string, string>
       {
         ["project"] = context.ProjectName
