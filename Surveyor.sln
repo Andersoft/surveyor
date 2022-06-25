@@ -25,9 +25,31 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Surveyor.SharedKernel", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CE095757-681C-4B88-890A-969A4DBBAE30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveyor.UnitTests", "tests\Surveyor.UnitTests\Surveyor.UnitTests.csproj", "{BD49FBCF-E978-4E38-8023-3A8D2405B56D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Surveyor.UnitTests", "tests\Surveyor.UnitTests\Surveyor.UnitTests.csproj", "{BD49FBCF-E978-4E38-8023-3A8D2405B56D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Surveyor.FunctionalTests", "tests\Surveyor.FunctionalTests\Surveyor.FunctionalTests.csproj", "{12B9FBB1-4765-4903-81D5-2349E2534691}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Surveyor.FunctionalTests", "tests\Surveyor.FunctionalTests\Surveyor.FunctionalTests.csproj", "{12B9FBB1-4765-4903-81D5-2349E2534691}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "helm", "helm", "{BBD1810E-084D-41D8-8B39-C2974A548CF6}"
+	ProjectSection(SolutionItems) = preProject
+		helm\.helmignore = helm\.helmignore
+		helm\Chart.yaml = helm\Chart.yaml
+		helm\values.yaml = helm\values.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "charts", "charts", "{E2D8F7B2-6DA9-4CE6-A42D-25B7CCDC22C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{09DEAA28-FD56-440A-8DF3-CE49504920DA}"
+	ProjectSection(SolutionItems) = preProject
+		helm\templates\configmap.yaml = helm\templates\configmap.yaml
+		helm\templates\deployment.yaml = helm\templates\deployment.yaml
+		helm\templates\hpa.yaml = helm\templates\hpa.yaml
+		helm\templates\ingress.yaml = helm\templates\ingress.yaml
+		helm\templates\NOTES.txt = helm\templates\NOTES.txt
+		helm\templates\secrets.yaml = helm\templates\secrets.yaml
+		helm\templates\service.yaml = helm\templates\service.yaml
+		helm\templates\serviceaccount.yaml = helm\templates\serviceaccount.yaml
+		helm\templates\_helpers.tpl = helm\templates\_helpers.tpl
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +97,9 @@ Global
 		{561C0200-6324-4E74-AA17-2E60D14106FB} = {36B409BB-FABF-4DD2-AEE1-B2906CD470B7}
 		{BD49FBCF-E978-4E38-8023-3A8D2405B56D} = {CE095757-681C-4B88-890A-969A4DBBAE30}
 		{12B9FBB1-4765-4903-81D5-2349E2534691} = {CE095757-681C-4B88-890A-969A4DBBAE30}
+		{BBD1810E-084D-41D8-8B39-C2974A548CF6} = {1A8F7EE7-5880-4299-8A31-94870F81DC81}
+		{E2D8F7B2-6DA9-4CE6-A42D-25B7CCDC22C1} = {BBD1810E-084D-41D8-8B39-C2974A548CF6}
+		{09DEAA28-FD56-440A-8DF3-CE49504920DA} = {BBD1810E-084D-41D8-8B39-C2974A548CF6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD0024E7-7751-43BA-A7EC-68E1F2410A2A}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cake.Core;
@@ -43,4 +44,72 @@ public static class DockerContextExtensions
 
     return result.ExitCode == 0;
   }
+
+  public static async Task<bool> TryDockerAuthenticate(
+    this ICakeContext context,
+    DockerAuthenticationOptions options)
+  {
+    string arguments = string.Empty;
+    arguments += string.IsNullOrWhiteSpace(options.Username)
+      ? string.Empty
+      : $"--Username {options.Username}{ArgumentSeparator}";
+
+    arguments += string.IsNullOrWhiteSpace(options.Password)
+      ? string.Empty
+      : $"--Password {options.Password}{ArgumentSeparator}";
+
+    var result = await Cli.Wrap(DockerBinaryName)
+      .WithWorkingDirectory(options.WorkingDirectory)
+      .WithArguments(new[] { "login", arguments }, false)
+      .WithStandardOutputPipe(PipeTarget.ToDelegate((info) => context.Log.Information(info)))
+      .WithStandardErrorPipe(PipeTarget.ToDelegate((error) => context.Log.Error(error)))
+      .ExecuteBufferedAsync();
+    
+    return result.ExitCode == 0;
+
+  }
+
+  public static async Task<bool> TryPushDockerImage(
+    this ICakeContext context,
+    DockerPushOptions options)
+  {
+
+    var tasks = options.Tags.Select(tag => TryPushDockerImage(context, 
+                                                              options.WorkingDirectory, 
+                                                              options.Username,
+                                                              options.Repository, tag));
+    return tasks.All(x => x.Result);
+  }
+
+  public static async Task<bool> TryPushDockerImage(
+    ICakeContext context,
+    string workingDirectory,
+    string username,
+    string repository,
+    string tag)
+  {
+    var result = await Cli.Wrap(DockerBinaryName)
+      .WithWorkingDirectory(workingDirectory)
+      .WithArguments(new[] { "push", $"{username}/{repository}:{tag}" }, false)
+      .WithStandardOutputPipe(PipeTarget.ToDelegate((info) => context.Log.Information(info)))
+      .WithStandardErrorPipe(PipeTarget.ToDelegate((error) => context.Log.Error(error)))
+      .ExecuteBufferedAsync();
+
+    return result.ExitCode == 0;
+  }
+}
+
+public class DockerAuthenticationOptions
+{
+  public string Username { get; set; }
+  public string Password { get; set; }
+  public string WorkingDirectory { get; set; }
+}
+
+public class DockerPushOptions
+{
+  public string WorkingDirectory { get; set; }
+  public string Username { get; set; }
+  public string Repository { get; set; }
+  public IEnumerable<string> Tags { get; set; }
 }

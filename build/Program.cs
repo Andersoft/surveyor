@@ -28,12 +28,20 @@ public class BuildContext : FrostingContext
   public BuildContext(ICakeContext context)
     : base(context)
   {
+    EntryLibrary = context.Arguments.GetArgument("entry_library");
     ProjectName = context.Arguments.GetArgument("project_name");
     SolutionPath = context.Arguments.GetArgument("solution_path");
+    Username = context.Arguments.GetArgument("username");
+    Password = context.Arguments.GetArgument("password");
     Tags = context.Arguments.GetArguments("tags");
   }
 
+  public string EntryLibrary { get; set; }
+
   public IEnumerable<string> Tags { get; set; }
+  public string Repository { get; set; }
+  public string Username { get; set; }
+  public string Password { get; set; }
 }
 
 [TaskName("Clean Solution")]
@@ -47,7 +55,7 @@ public sealed class CleanSolution : FrostingTask<BuildContext>
 
 [TaskName("Build Dockerfile")]
 [IsDependentOn(typeof(CleanSolution))]
-public sealed class BuildDockerfile : AsyncFrostingTask<BuildContext>
+public sealed class RunTests : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
   public override async Task RunAsync(BuildContext context)
@@ -61,7 +69,7 @@ public sealed class BuildDockerfile : AsyncFrostingTask<BuildContext>
       Tags = context.Tags,
       BuildArguments = new Dictionary<string, string>
       {
-        ["project"] = context.ProjectName
+        ["project"] = context.EntryLibrary
       }
     };
 
@@ -73,8 +81,8 @@ public sealed class BuildDockerfile : AsyncFrostingTask<BuildContext>
 }
 
 [TaskName("Publish Application")]
-[IsDependentOn(typeof(BuildDockerfile))]
-public sealed class PublishApplication : AsyncFrostingTask<BuildContext>
+[IsDependentOn(typeof(RunTests))]
+public sealed class BuildImage : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
   public override async Task RunAsync(BuildContext context)
@@ -87,7 +95,7 @@ public sealed class PublishApplication : AsyncFrostingTask<BuildContext>
       Tags = context.Tags,
       BuildArguments = new Dictionary<string, string>
       {
-        ["project"] = context.ProjectName
+        ["project"] = context.EntryLibrary
       }
     };
 
@@ -98,8 +106,52 @@ public sealed class PublishApplication : AsyncFrostingTask<BuildContext>
   }
 }
 
+[TaskName("Authenticate Docker")]
+[IsDependentOn(typeof(BuildImage))]
+public sealed class AuthenticateDocker : AsyncFrostingTask<BuildContext>
+{
+  public override async Task RunAsync(BuildContext context)
+  {
+
+    var options = new DockerAuthenticationOptions
+    {
+      WorkingDirectory = context.SolutionPath,
+      Username = context.Username,
+      Password = context.Password
+      };
+
+    if (await context.TryDockerAuthenticate(options) is false)
+    {
+      throw new Exception("Failed to authenticate with Docker");
+    }
+  }
+}
+
+[TaskName("Publish Image")]
+[IsDependentOn(typeof(AuthenticateDocker))]
+public sealed class PublishImage : AsyncFrostingTask<BuildContext>
+{
+  // Tasks can be asynchronous
+  public override async Task RunAsync(BuildContext context)
+  {
+
+    var options = new DockerPushOptions
+    {
+      WorkingDirectory = context.SolutionPath,
+      Tags = context.Tags,
+      Repository = context.Repository,
+      Username = context.Username
+    };
+
+    if (await context.TryPushDockerImage(options) is false)
+    {
+      throw new Exception("Failed to push Docker image");
+    }
+  }
+}
+
 [TaskName("Default")]
-[IsDependentOn(typeof(PublishApplication))]
+[IsDependentOn(typeof(PublishImage))]
 public class DefaultTask : FrostingTask
 {
 }
