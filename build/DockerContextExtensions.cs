@@ -52,11 +52,11 @@ public static class DockerContextExtensions
     string arguments = string.Empty;
     arguments += string.IsNullOrWhiteSpace(options.Username)
       ? string.Empty
-      : $"--Username {options.Username}{ArgumentSeparator}";
+      : $"--username {options.Username}{ArgumentSeparator}";
 
     arguments += string.IsNullOrWhiteSpace(options.Password)
       ? string.Empty
-      : $"--Password {options.Password}{ArgumentSeparator}";
+      : $"--password {options.Password}{ArgumentSeparator}";
 
     var result = await Cli.Wrap(DockerBinaryName)
       .WithWorkingDirectory(options.WorkingDirectory)
