@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class DockerBuildOptions
 {
@@ -8,4 +9,6 @@ public class DockerBuildOptions
   public string Target { get; internal set; }
   public IEnumerable<string> Tags { get; internal set; }
   public string DockerfileLocation { get; internal set; }
+  public string Repository { get; set; }
+  public string Username { get; set; }
 }

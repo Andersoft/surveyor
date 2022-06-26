@@ -30,10 +30,12 @@ public static class DockerContextExtensions
       ? string.Empty
       : $"{options.DockerfileLocation}{ArgumentSeparator}";
 
-    var tags = string.Join($"{ArgumentSeparator}-t", options.Tags);
+    var tags = string.Join($"{ArgumentSeparator}-t {options.Username}/{options.Repository}:", options.Tags);
     arguments += string.IsNullOrWhiteSpace(tags)
       ? string.Empty
-      : $"-t {tags}{ArgumentSeparator}";
+      : $"-t {options.Username}/{options.Repository}:{tags}{ArgumentSeparator}";
+
+    context.Log.Information($"docker build {arguments}");
 
     var result = await Cli.Wrap(DockerBinaryName)
       .WithWorkingDirectory(options.WorkingDirectory)
@@ -58,6 +60,8 @@ public static class DockerContextExtensions
       ? string.Empty
       : $"--password {options.Password}{ArgumentSeparator}";
 
+    context.Log.Information($"docker login {arguments}");
+
     var result = await Cli.Wrap(DockerBinaryName)
       .WithWorkingDirectory(options.WorkingDirectory)
       .WithArguments(new[] { "login", arguments }, false)
@@ -77,7 +81,8 @@ public static class DockerContextExtensions
     var tasks = options.Tags.Select(tag => TryPushDockerImage(context, 
                                                               options.WorkingDirectory, 
                                                               options.Username,
-                                                              options.Repository, tag));
+                                                              options.Repository, 
+                                                              tag));
     return tasks.All(x => x.Result);
   }
 
@@ -88,9 +93,24 @@ public static class DockerContextExtensions
     string repository,
     string tag)
   {
+    string arguments = string.Empty;
+    arguments += string.IsNullOrWhiteSpace(username)
+      ? string.Empty
+      : $"{username}/";
+
+    arguments += string.IsNullOrWhiteSpace(repository)
+      ? string.Empty
+      : $"{repository}:";
+
+    arguments += string.IsNullOrWhiteSpace(tag)
+      ? string.Empty
+      : $"{tag}";
+
+    context.Log.Information($"docker push {arguments}");
+
     var result = await Cli.Wrap(DockerBinaryName)
       .WithWorkingDirectory(workingDirectory)
-      .WithArguments(new[] { "push", $"{username}/{repository}:{tag}" }, false)
+      .WithArguments(new[] { "push", arguments }, false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate((info) => context.Log.Information(info)))
       .WithStandardErrorPipe(PipeTarget.ToDelegate((error) => context.Log.Error(error)))
       .ExecuteBufferedAsync();

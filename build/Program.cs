@@ -39,7 +39,6 @@ public class BuildContext : FrostingContext
   public string EntryLibrary { get; set; }
 
   public IEnumerable<string> Tags { get; set; }
-  public string Repository { get; set; }
   public string Username { get; set; }
   public string Password { get; set; }
 }
@@ -67,6 +66,8 @@ public sealed class RunTests : AsyncFrostingTask<BuildContext>
       Target = "test-results",
       WorkingDirectory = context.SolutionPath,
       Tags = context.Tags,
+      Username = context.Username,
+      Repository = context.ProjectName.ToLower(),
       BuildArguments = new Dictionary<string, string>
       {
         ["project"] = context.EntryLibrary
@@ -93,6 +94,8 @@ public sealed class BuildImage : AsyncFrostingTask<BuildContext>
       DockerfileLocation = ".",
       WorkingDirectory = context.SolutionPath,
       Tags = context.Tags,
+      Username = context.Username,
+      Repository = context.ProjectName.ToLower(),
       BuildArguments = new Dictionary<string, string>
       {
         ["project"] = context.EntryLibrary
@@ -139,7 +142,7 @@ public sealed class PublishImage : AsyncFrostingTask<BuildContext>
     {
       WorkingDirectory = context.SolutionPath,
       Tags = context.Tags,
-      Repository = context.Repository,
+      Repository = context.ProjectName.ToLower(),
       Username = context.Username
     };
 
