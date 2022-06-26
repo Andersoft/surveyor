@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "servicechart.fullname" . }}-appsettings
+  namespace: {{ include "servicechart.namespace" . }}
+data:
+  appsettings.config.json: |-
+{{ .Files.Get "appsettings.config.json" | indent 4 }}
