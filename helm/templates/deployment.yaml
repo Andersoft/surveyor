@@ -45,8 +45,22 @@ spec:
             httpGet:
               path: /
               port: http
+          volumeMounts:
+            - name: {{ include "servicechart.fullname" . }}-secrets
+              mountPath: /app/appsettings.secrets.json
+              subPath: appsettings.secrets.json
+            - name: {{ include "servicechart.fullname" . }}-configmap
+              mountPath: /app/appsettings.json
+              subPath: appsettings.json
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ include "servicechart.fullname" . }}-secrets
+          secret:
+            secretName: {{ include "servicechart.fullname" . }}-appsettings
+        - name: {{ include "servicechart.fullname" . }}-configmap
+          configMap:
+            name: {{ include "servicechart.fullname" . }}-appsettings
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
