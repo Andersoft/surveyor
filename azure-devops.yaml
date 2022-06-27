@@ -1,0 +1,29 @@
+name: $(version)-$(Build.SourceBranchName).$(Build.BuildId)
+
+pool:
+  name: LocalBuildServer
+
+variables:
+- name: version
+  value: 0.1.0
+
+stages:
+- stage: Dev
+  jobs:
+    - job: Version
+      steps:
+        - powershell: |
+            if("$(Build.SourceBranchName)" -ne "main" ) { 
+              Write-Host "##vso[task.setvariable variable=version]$(version)-$(Build.SourceBranchName).$(Build.BuildId)" 
+            } else {
+              Write-Host "##vso[build.updatebuildnumber]$(version)"
+            }             
+          displayName: 'Configure Version'
+        - powershell: |
+            $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project defi | ConvertFrom-Json | where name -eq "Surveyor"
+            $options = @{}
+            $projectVariables.variables.PSObject.Properties | forEach { Add-Member -InputObject $options -NotePropertyName $_.Name -NotePropertyValue $_.Value.value }
+            push-location -path ".\Build" 
+            .\build.ps1 $options`
+            pop-location
+          displayName: 'Run Cake Build Script'
