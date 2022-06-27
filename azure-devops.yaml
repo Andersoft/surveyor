@@ -26,7 +26,5 @@ stages:
             $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft | ConvertFrom-Json | where name -eq "Surveyor"
             $options = @{}
             $projectVariables.variables.PSObject.Properties | forEach { Add-Member -InputObject $options -NotePropertyName $_.Name -NotePropertyValue $_.Value.value }
-            push-location -path ".\Build" 
             .\build.ps1 $options`
-            pop-location
           displayName: 'Run Cake Build Script'
