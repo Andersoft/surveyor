@@ -1,13 +1,14 @@
 replicaCount: 1
 
 image:
-  repository: andersoft/surveyor
+  repository: kstarian/surveyor
   pullPolicy: Always
   tag: "latest"
 
 imagePullSecrets: []
 nameOverride: "surveyor"
 fullnameOverride: "surveyor"
+namespace: "devops"
 
 serviceAccount:
   create: true
@@ -17,3 +18,13 @@ serviceAccount:
 service:
   type: ClusterIP
   port: 80
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+appsettings:
+  config: "appsettings.json"
+  secrets: "appsettings.secrets.json"
