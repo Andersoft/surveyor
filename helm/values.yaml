@@ -26,5 +26,5 @@ autoscaling:
   enabled: false
 
 appsettings:
-  config: "appsettings.json"
-  secrets: "appsettings.secrets.json"
+  config: "{}"
+  secrets: "{}"

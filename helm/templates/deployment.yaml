@@ -50,7 +50,7 @@ spec:
               mountPath: /app/appsettings.secrets.json
               subPath: appsettings.secrets.json
             - name: {{ include "surveyor.fullname" . }}-configmap
-              mountPath: /app/appsettings.json
+              mountPath: /app/appsettings.config.json
               subPath: appsettings.json
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
