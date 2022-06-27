@@ -4,6 +4,8 @@ pool:
   name: LocalBuildServer
 
 variables:
+- group: devops
+- group: Surveyor
 - name: version
   value: 0.1.0
 
@@ -20,7 +22,8 @@ stages:
             }             
           displayName: 'Configure Version'
         - powershell: |
-            $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project defi | ConvertFrom-Json | where name -eq "Surveyor"
+            echo "$(pat)" | az devops login --organization https://dev.azure.com/magnoxium/
+            $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft | ConvertFrom-Json | where name -eq "Surveyor"
             $options = @{}
             $projectVariables.variables.PSObject.Properties | forEach { Add-Member -InputObject $options -NotePropertyName $_.Name -NotePropertyValue $_.Value.value }
             push-location -path ".\Build" 
