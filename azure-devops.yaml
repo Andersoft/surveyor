@@ -19,12 +19,13 @@ stages:
               Write-Host "##vso[task.setvariable variable=version]$(version)-$(Build.SourceBranchName).$(Build.BuildId)" 
             } else {
               Write-Host "##vso[build.updatebuildnumber]$(version)"
-            }             
+            }
           displayName: 'Configure Version'
         - powershell: |
             echo "$(pat)" | az devops login --organization https://dev.azure.com/magnoxium/
             $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft | ConvertFrom-Json | where name -eq "Surveyor"
             $options = @{}
             $projectVariables.variables.PSObject.Properties | forEach { Add-Member -InputObject $options -NotePropertyName $_.Name -NotePropertyValue $_.Value.value }
+            $options.keys | ForEach-Object { Write-Output '{0}={1}' -f $_, $options[$_] }
             .\build.ps1 @options`
           displayName: 'Run Cake Build Script'
