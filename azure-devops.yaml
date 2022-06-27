@@ -1,7 +1,7 @@
 name: $(version)-$(Build.SourceBranchName).$(Build.BuildId)
 
 pool:
-  name: LocalBuildServer
+  name: Minikube
 
 variables:
 - group: devops
