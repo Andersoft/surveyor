@@ -15,7 +15,7 @@ public static class Program
   public static int Main(string[] args)
   {
     Console.WriteLine(string.Join(" ; ", args));
-    
+
     return new CakeHost()
         .UseContext<BuildContext>()
         .Run(args);
@@ -51,11 +51,32 @@ public sealed class CleanSolution : FrostingTask<BuildContext>
   public override void Run(BuildContext context)
   {
     context.GitClean(context.SolutionPath);
+
+    var testDirectory = System.IO.Path.Combine(context.SolutionPath, "artifacts/test_results");
+    if(System.IO.Directory.Exists(testDirectory))
+    {
+      System.IO.Directory.CreateDirectory(testDirectory);
+    }
+  }
+}
+
+[TaskName("Configure Directories")]
+[IsDependentOn(typeof(CleanSolution))]
+public sealed class ConfigureDirectories : FrostingTask<BuildContext>
+{
+  public override void Run(BuildContext context)
+  {
+    var testDirectory = System.IO.Path.Combine(context.SolutionPath, "artifacts/test_results");
+    
+    if(System.IO.Directory.Exists(testDirectory))
+    {
+      System.IO.Directory.CreateDirectory(testDirectory);
+    }
   }
 }
 
 [TaskName("Build Dockerfile")]
-[IsDependentOn(typeof(CleanSolution))]
+[IsDependentOn(typeof(ConfigureDirectories))]
 public sealed class RunTests : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
@@ -64,7 +85,7 @@ public sealed class RunTests : AsyncFrostingTask<BuildContext>
     var options = new DockerBuildOptions
     {
       DockerfileLocation = ".",
-      OutputDirectory = "artifacts/test_results",
+      OutputDirectory = "artifacts/test_results/",
       Target = "test-results",
       WorkingDirectory = context.SolutionPath,
       Tags = context.Tags,
