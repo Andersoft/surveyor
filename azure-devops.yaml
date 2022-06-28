@@ -26,6 +26,5 @@ stages:
             $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft --group Surveyor | ConvertFrom-Json
             $options = @( "--password=$(password)" )
             $projectVariables.variables.PSObject.Properties | where {$_.Value.value -ne $null} | forEach { $options+= "--$($_.Name)=$($_.Value.value)"  }
-            $options+= 
             .\build.ps1 @options
           displayName: 'Run Cake Build Script'
