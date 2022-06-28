@@ -29,7 +29,7 @@ RUN dotnet test -c Release --no-build --logger trx
 # be overwritten by preceding files with the same name. 
 
 FROM scratch AS test-results
-COPY --from=test /app/tests/**/TestResults/*.trx .
+COPY --from=test /app/tests/**/TestResults/*.trx ./
 
 FROM build as publish
 RUN dotnet publish "./src/$project" -c Release --no-build -o /app/publish
@@ -40,5 +40,5 @@ WORKDIR /app
 ENV APP_NAME "${project}.dll"
 EXPOSE 80
 EXPOSE 443
-COPY --from=publish /app/publish .
+COPY --from=publish /app/publish ./
 ENTRYPOINT dotnet "$APP_NAME"
