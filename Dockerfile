@@ -32,6 +32,7 @@ FROM scratch AS test-results
 COPY --from=test /app/tests/**/TestResults/*.trx ./
 
 FROM build as publish
+ARG project
 RUN dotnet publish "./src/$project" -c Release --no-build -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
