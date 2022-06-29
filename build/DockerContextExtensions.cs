@@ -1,10 +1,11 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using CliWrap;
 using CliWrap.Buffered;
+
+namespace Build;
 
 public static class DockerContextExtensions
 {
@@ -117,19 +118,4 @@ public static class DockerContextExtensions
 
     return result.ExitCode == 0;
   }
-}
-
-public class DockerAuthenticationOptions
-{
-  public string Username { get; set; }
-  public string Password { get; set; }
-  public string WorkingDirectory { get; set; }
-}
-
-public class DockerPushOptions
-{
-  public string WorkingDirectory { get; set; }
-  public string Username { get; set; }
-  public string Repository { get; set; }
-  public IEnumerable<string> Tags { get; set; }
 }
