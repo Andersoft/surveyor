@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Cake.Frosting;
 
-namespace Build.build_steps;
+namespace Build.Steps.Build;
 
 [TaskName("Authenticate Docker")]
 [IsDependentOn(typeof(BuildImage))]

@@ -1,6 +1,6 @@
 ﻿using Cake.Frosting;
 
-namespace Build.build_steps;
+namespace Build.Steps.Build;
 
 [TaskName("Configure Directories")]
 [IsDependentOn(typeof(CleanSolution))]

@@ -1,10 +1,9 @@
-﻿using Cake.Core;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cake.Core;
 using Cake.Frosting;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Build.build_steps
+namespace Build.Steps.Build
 {
   public class BuildContext : FrostingContext
   {
@@ -17,9 +16,11 @@ namespace Build.build_steps
       EntryLibrary = context.Arguments.GetArgument("entry_library");
       ProjectName = context.Arguments.GetArgument("project_name");
       SolutionPath = context.Arguments.GetArgument("solution_path");
+      Version = context.Arguments.GetArgument("app_version");
       Username = context.Arguments.GetArgument("username");
       Password = context.Arguments.GetArgument("password");
       Tags = context.Arguments.GetArguments("tags");
+      HelmRepository = context.Arguments.GetArgument("helm_repository");
     }
 
     public string EntryLibrary { get; set; }
@@ -27,5 +28,7 @@ namespace Build.build_steps
     public IEnumerable<string> Tags { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
+    public string Version { get; set; }
+    public string HelmRepository { get; set; }
   }
 }

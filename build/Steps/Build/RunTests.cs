@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Frosting;
 
-namespace Build.build_steps;
+namespace Build.Steps.Build;
 
-[TaskName("Publish Application")]
-[IsDependentOn(typeof(RunTests))]
-public sealed class BuildImage : AsyncFrostingTask<BuildContext>
+[TaskName("Build Dockerfile")]
+[IsDependentOn(typeof(ConfigureDirectories))]
+public sealed class RunTests : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
   public override async Task RunAsync(BuildContext context)
   {
-
     var options = new DockerBuildOptions
     {
       DockerfileLocation = ".",
+      OutputDirectory = "artifacts/test_results/",
+      Target = "test-results",
       WorkingDirectory = context.SolutionPath,
       Tags = context.Tags,
       Username = context.Username,

@@ -1,5 +1,7 @@
-using Build.build_steps;
+using Build.Steps.Build;
 using Cake.Frosting;
+
+namespace Build;
 
 [TaskName("Default")]
 [IsDependentOn(typeof(PublishImage))]
