@@ -24,7 +24,6 @@ namespace Build.Steps.Build
     }
 
     public string EntryLibrary { get; set; }
-
     public IEnumerable<string> Tags { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
