@@ -33,11 +33,11 @@ public static class HelmContextExtensions
       HelmPublishOptions options)
     {
 
-        context.Log.Information($"helm push {options.PackageFolder} {options.RepositoryName}");
+        context.Log.Information($"helm cm-push {options.PackageFolder} {options.RepositoryName}");
 
         var result = await Cli.Wrap(BinaryName)
           .WithWorkingDirectory(options.WorkingDirectory)
-          .WithArguments(new[] { "push", options.PackageFolder, options.RepositoryName }, false)
+          .WithArguments(new[] { "cm-push", options.PackageFolder, options.RepositoryName }, false)
           .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
           .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
           .ExecuteBufferedAsync();
