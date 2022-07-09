@@ -5,7 +5,7 @@ using Cake.Frosting;
 namespace Build.Steps.Build;
 
 [TaskName("Publish Helm Chart")]
-[IsDependentOn(typeof(PackagehHelmChart))]
+[IsDependentOn(typeof(AddRemoteRepository))]
 public sealed class PublishHelmChart : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
@@ -14,7 +14,7 @@ public sealed class PublishHelmChart : AsyncFrostingTask<BuildContext>
     var options = new HelmPublishOptions
     {
       PackageFolder = "./artifacts/helm",
-      Remote = context.HelmRepository,
+      RepositoryName = context.HelmRepositoryName
     };
 
     if (await context.TryPublishHelmChartAsync(options) is false)

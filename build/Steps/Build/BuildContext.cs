@@ -20,7 +20,8 @@ namespace Build.Steps.Build
       Username = context.Arguments.GetArgument("username");
       Password = context.Arguments.GetArgument("password");
       Tags = context.Arguments.GetArguments("tags");
-      HelmRepository = context.Arguments.GetArgument("helm_repository");
+      HelmRepositoryName = context.Arguments.GetArgument("helm_repository_name");
+      HelmRepositoryAddress = context.Arguments.GetArgument("helm_repository_address");
     }
 
     public string EntryLibrary { get; set; }
@@ -28,6 +29,7 @@ namespace Build.Steps.Build
     public string Username { get; set; }
     public string Password { get; set; }
     public string Version { get; set; }
-    public string HelmRepository { get; set; }
+    public string HelmRepositoryName { get; set; }
+    public string HelmRepositoryAddress { get; set; }
   }
 }

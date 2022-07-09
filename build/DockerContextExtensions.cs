@@ -13,16 +13,32 @@ public static class HelmContextExtensions
   const string BinaryName = "helm";
   const string ArgumentSeparator = " ";
 
+  public static async Task<bool> TryAddHelmRepositoryAsync(
+    this ICakeContext context,
+    HelmRepositoryOptions options)
+  {
+
+    context.Log.Information($"helm repo add {options.RepositoryName} {options.RepositoryAddress}");
+
+    var result = await Cli.Wrap(BinaryName)
+      .WithArguments(new[] { "repo add", options.RepositoryName, options.RepositoryAddress }, false)
+      .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
+      .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
+      .ExecuteBufferedAsync();
+
+    return result.ExitCode == 0;
+  }
+
   public static async Task<bool> TryPublishHelmChartAsync(
     this ICakeContext context, 
     HelmPublishOptions options)
   {
 
-    context.Log.Information($"helm push {options.ChartName} {options.Remote}");
+    context.Log.Information($"helm push {options.PackageFolder} {options.RepositoryName}");
 
     var result = await Cli.Wrap(BinaryName)
       .WithWorkingDirectory(options.PackageFolder)
-      .WithArguments(new[] { "push", options.ChartName, options.Remote }, false)
+      .WithArguments(new[] { "push", options.PackageFolder, options.RepositoryName }, false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
       .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
       .ExecuteBufferedAsync();
@@ -66,17 +82,23 @@ public static class HelmContextExtensions
       ? string.Empty
       : $"--version {options.Version}{ArgumentSeparator}";
 
-    context.Log.Information($"helm package {arguments}");
+    context.Log.Information($"helm package {options.ChartPath} {arguments}");
 
     var result = await Cli.Wrap(BinaryName)
       .WithWorkingDirectory(options.ChartPath)
-      .WithArguments(new[] { "package", arguments }, false)
+      .WithArguments(new[] { "package", options.ChartPath, arguments }, false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
       .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
       .ExecuteBufferedAsync();
 
     return result.ExitCode == 0;
   }
+}
+
+public class HelmRepositoryOptions
+{
+  public string RepositoryName { get; set; }
+  public string RepositoryAddress { get; set; }
 }
 
 public static class DockerContextExtensions

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Cake.Frosting;
 
@@ -14,7 +15,7 @@ public sealed class PackagehHelmChart : AsyncFrostingTask<BuildContext>
 
     var options = new HelmPackageOptions
     {
-      ChartPath = context.SolutionPath,
+      ChartPath = Path.Combine(context.SolutionPath, "helm"),
       AppVersion = context.Version,
       Destination = "./artifacts/helm"
     };
