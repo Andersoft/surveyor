@@ -19,7 +19,8 @@ public sealed class PackagehHelmChart : AsyncFrostingTask<BuildContext>
     {
       ChartPath = Path.Combine(context.SolutionPath, "helm"),
       AppVersion = context.Version,
-      Destination = packageFolder
+      Destination = packageFolder,
+      Version = context.Version
     };
 
     if (await context.TryPackageHelmChartAsync(options) is false)
