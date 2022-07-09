@@ -13,12 +13,13 @@ public sealed class PackagehHelmChart : AsyncFrostingTask<BuildContext>
   // Tasks can be asynchronous
   public override async Task RunAsync(BuildContext context)
   {
+    var packageFolder = Path.GetFullPath(Path.Combine(context.SolutionPath, "artifacts/helm/"));
 
     var options = new HelmPackageOptions
     {
       ChartPath = Path.Combine(context.SolutionPath, "helm"),
       AppVersion = context.Version,
-      Destination = "./artifacts/helm"
+      Destination = packageFolder
     };
 
     if (await context.TryPackageHelmChartAsync(options) is false)
