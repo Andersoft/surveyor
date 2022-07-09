@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Build.Extensions.Helm;
 using Cake.Frosting;
@@ -14,8 +15,7 @@ public sealed class PublishHelmChart : AsyncFrostingTask<BuildContext>
   {
     var options = new HelmPublishOptions
     {
-      WorkingDirectory = context.SolutionPath,
-      PackageFolder = "./artifacts/helm/",
+      PackageFolder = Path.GetFullPath(Path.Combine(context.SolutionPath, "artifacts/helm/")),
       RepositoryName = context.HelmRepositoryName
     };
 

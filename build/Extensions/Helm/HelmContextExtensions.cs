@@ -33,12 +33,10 @@ public static class HelmContextExtensions
       this ICakeContext context,
       HelmPublishOptions options)
     {
-      var packagePath = Path.Combine(Directory.GetCurrentDirectory(), options.PackageFolder);
-      context.Log.Information($"helm cm-push {packagePath} {options.RepositoryName}");
+        context.Log.Information($"helm cm-push {options.PackageFolder} {options.RepositoryName}");
 
         var result = await Cli.Wrap(BinaryName)
-          .WithWorkingDirectory(options.WorkingDirectory)
-          .WithArguments(new[] { "cm-push", packagePath, options.RepositoryName }, false)
+          .WithArguments(new[] { "cm-push", options.PackageFolder, options.RepositoryName }, false)
           .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
           .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
           .ExecuteBufferedAsync();
