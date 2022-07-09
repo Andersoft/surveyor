@@ -36,7 +36,7 @@ public static class HelmContextExtensions
         context.Log.Information($"helm push {options.PackageFolder} {options.RepositoryName}");
 
         var result = await Cli.Wrap(BinaryName)
-          .WithWorkingDirectory(options.PackageFolder)
+          .WithWorkingDirectory(options.WorkingDirectory)
           .WithArguments(new[] { "push", options.PackageFolder, options.RepositoryName }, false)
           .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
           .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))

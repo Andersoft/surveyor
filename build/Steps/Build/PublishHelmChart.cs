@@ -14,7 +14,8 @@ public sealed class PublishHelmChart : AsyncFrostingTask<BuildContext>
   {
     var options = new HelmPublishOptions
     {
-      PackageFolder = "./artifacts/helm",
+      WorkingDirectory = context.SolutionPath,
+      PackageFolder = "./artifacts/helm/",
       RepositoryName = context.HelmRepositoryName
     };
 
