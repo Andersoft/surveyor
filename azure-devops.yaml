@@ -28,3 +28,8 @@ stages:
             $projectVariables.variables.PSObject.Properties | where {$_.Value.value -ne $null} | forEach { $options+= "--$($_.Name)=$($_.Value.value)"  }
             .\build.ps1 @options
           displayName: 'Run Cake Build Script'
+        - task: PublishTestResults@2
+          inputs:
+            testResultsFormat: 'VSTest'
+            searchFolder: './artifacts/test-results/'
+            testResultsFiles: '*.trx'
