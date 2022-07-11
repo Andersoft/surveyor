@@ -24,7 +24,7 @@ public sealed class TransformVariables : AsyncFrostingTask<BuildContext>
         Arguments = context.Arguments(),
         ConfigFile = context.ConfigFile,
         SecretsFile= context.SecretsFile,
-        Destination = "./artifacts/settings"
+        Destination = Path.Combine(context.SolutionPath, "./artifacts/settings")
       };
 
       await context.Transform(options);

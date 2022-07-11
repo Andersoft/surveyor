@@ -31,13 +31,17 @@ public static class JsonExtensions
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
       .Build();
 
-    var output = Serializer.Serialize(new AppSettings
+    if (!Directory.Exists(options.Destination))
     {
-      Config = config,
-      Secrets = secrets
-    });
+      Directory.CreateDirectory(options.Destination);
+    }
 
-    await File.WriteAllTextAsync(Path.Combine(options.Destination, "override.yaml"), Serializer.Serialize(output));
+    string? content = @$"appsettings:
+  config: {config}
+  secrets: {secrets}
+";
+
+    await File.WriteAllTextAsync(Path.Combine(options.Destination, "override.yaml"), content);
   }
 
   private static async Task<string> TransformFile(
