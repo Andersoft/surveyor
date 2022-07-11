@@ -13,6 +13,7 @@ using Cake.Frosting;
 
 namespace Build.Steps.Deploy;
 
+[TaskName("Transform Variables")]
 public sealed class TransformVariables : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
