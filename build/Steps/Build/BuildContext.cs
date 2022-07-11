@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Cake.Core;
 using Cake.Frosting;
@@ -31,5 +32,7 @@ namespace Build.Steps.Build
     public string Version { get; set; }
     public string HelmRepositoryName { get; set; }
     public string HelmRepositoryAddress { get; set; }
+    public FileInfo SecretsFile { get; set; }
+    public FileInfo ConfigFile { get; set; }
   }
 }

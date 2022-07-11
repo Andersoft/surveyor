@@ -1,7 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Build.Steps.Deploy;
+using Cake.Core;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Build.Extensions.JSON;
@@ -12,7 +18,36 @@ public static class JsonExtensions
     {
         OBJECT, ARRAY
     }
-    public static Dictionary<string, string> Flatten(this JObject jsonObject)
+
+    public static async Task Transform(
+      this ICakeContext context,
+      TransformVariablesOptions options)
+    {
+      await TransformFile(options.ConfigFile, options.Arguments, options.Destination);
+      await TransformFile(options.SecretsFile, options.Arguments, options.Destination);
+    }
+
+    private static async Task TransformFile(
+      FileInfo file,
+      IDictionary<string, ICollection<string>> arguments, 
+      string destinationFolder)
+    {
+      using var streamReader = new StreamReader(file.OpenRead());
+      var jsonTextReader = new JsonTextReader(streamReader);
+      var jObject = await JObject.LoadAsync(jsonTextReader);
+      var settings = Flatten(jObject);
+      foreach (var keyValuePair in arguments)
+      {
+        if (settings.ContainsKey(keyValuePair.Key))
+        {
+          settings[keyValuePair.Key] = string.Join(",", keyValuePair.Value);
+        }
+      }
+
+      await File.WriteAllTextAsync(Path.Combine(destinationFolder, file.Name), settings.Unflatten().ToString(Formatting.None));
+    }
+
+    private static Dictionary<string, string> Flatten(JObject jsonObject)
     {
         IEnumerable<JToken> jTokens = jsonObject.Descendants().Where(p => p.Count() == 0);
         Dictionary<string, string> results = jTokens.Aggregate(new Dictionary<string, string>(), (properties, jToken) =>

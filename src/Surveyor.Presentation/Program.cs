@@ -18,6 +18,11 @@ namespace Surveyor.Presentation
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
+          .ConfigureHostConfiguration(builder =>
+          {
+            builder.AddJsonFile("appsettings.json", true);
+            builder.AddJsonFile("appsettings.secrets.json", true);
+          })
             .ConfigureWebHostDefaults(webBuilder =>
             {
               webBuilder.UseStartup<Startup>();
