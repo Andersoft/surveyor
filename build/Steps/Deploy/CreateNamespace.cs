@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Build.Extensions.Docker;
+using Build.Extensions.Kubectl;
 using Build.Steps.Build;
 using Cake.Frosting;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace Build.Steps.Deploy;
 
@@ -15,12 +13,23 @@ public sealed class CreateNamespace : AsyncFrostingTask<BuildContext>
     // Tasks can be asynchronous
     public override async Task RunAsync(BuildContext context)
     {
-    
-    }
+      var options = new NamespaceOptions
+      {
+        Name = "devops",
+        Overwrite = true,
+        Value = "istio-injection=enable"
+      };
+
+      if (await context.CreateNamespace(options) is false)
+      {
+        throw new Exception("Failed create namespace");
+      }
+  }
 }
 
-public class AppSettings
+public class NamespaceOptions
 {
-  public string Config { get; set; }
-  public string Secrets { get; set; }
+  public string Name { get; set; }
+  public bool Overwrite { get; set; }
+  public string Value { get; set; }
 }

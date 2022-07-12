@@ -17,17 +17,6 @@ public sealed class DeployHelmChart : AsyncFrostingTask<BuildContext>
   public override async Task RunAsync(BuildContext context)
   {
     // create values file
-    var options = new DockerPushOptions
-    {
-      WorkingDirectory = context.SolutionPath,
-      Tags = context.Tags,
-      Repository = context.ProjectName.ToLower(),
-      Username = context.Username
-    };
-
-    if (await context.TryPushDockerImage(options) is false)
-    {
-      throw new Exception("Failed to push Docker image");
-    }
+    
   }
 }
