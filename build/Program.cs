@@ -1,5 +1,6 @@
 using System;
-using Build.Steps.Build;
+using System.Linq;
+using Build.Context;
 using Cake.Frosting;
 
 namespace Build;
@@ -10,8 +11,14 @@ public static class Program
   {
     Console.WriteLine(string.Join(" ; ", args));
 
-    return new CakeHost()
-      .UseContext<BuildContext>()
-      .Run(args);
+    var isDeployment = args.Any(x => x.Contains("--target=Create Namespace")
+                                     || x.Contains("--target=Deploy Helm Chart")
+                                     || x.Contains("--target=Transform Variables"));
+    var host = new CakeHost();
+      
+    return (isDeployment 
+          ? host.UseContext<DeployContext>() 
+          : host.UseContext<BuildContext>())
+        .Run(args);
   }
 }

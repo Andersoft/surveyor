@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Build.Context;
 using Build.Extensions.Helm;
 using Build.Extensions.Kubectl;
-using Build.Steps.Build;
 using Cake.Frosting;
 
 namespace Build.Steps.Deploy;
 
 [TaskName("Create Namespace")]
 [IsDependentOn(typeof(TransformVariables))]
-public sealed class CreateNamespace : AsyncFrostingTask<BuildContext>
+public sealed class CreateNamespace : AsyncFrostingTask<DeployContext>
 {
     // Tasks can be asynchronous
-    public override async Task RunAsync(BuildContext context)
+    public override async Task RunAsync(DeployContext context)
     {
       var options = new NamespaceOptions
       {
-        Name = "devops",
+        Name = context.Namespace,
         Overwrite = true,
-        Value = "istio-injection=enable"
+        Value = context.NamespaceLabels //"istio-injection=enable"
       };
 
       if (await context.CreateNamespace(options) is false)

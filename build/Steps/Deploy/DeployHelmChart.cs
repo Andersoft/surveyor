@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Build.Context;
 using Build.Extensions.Docker;
 using Build.Extensions.Helm;
 using Build.Extensions.Kubectl;
-using Build.Steps.Build;
 using Cake.Frosting;
 
 namespace Build.Steps.Deploy;
@@ -14,10 +14,10 @@ namespace Build.Steps.Deploy;
 
 [TaskName("Deploy Helm Chart")]
 [IsDependentOn(typeof(CreateNamespace))]
-public sealed class DeployHelmChart : AsyncFrostingTask<BuildContext>
+public sealed class DeployHelmChart : AsyncFrostingTask<DeployContext>
 {
   // Tasks can be asynchronous
-  public override async Task RunAsync(BuildContext context)
+  public override async Task RunAsync(DeployContext context)
   {
     var options = new DeployHelmChartOptions
     {
