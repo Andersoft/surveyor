@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Build.Extensions.Helm;
 using Build.Extensions.Kubectl;
 using Build.Steps.Build;
 using Cake.Frosting;
@@ -25,11 +26,4 @@ public sealed class CreateNamespace : AsyncFrostingTask<BuildContext>
         throw new Exception("Failed create namespace");
       }
   }
-}
-
-public class NamespaceOptions
-{
-  public string Name { get; set; }
-  public bool Overwrite { get; set; }
-  public string Value { get; set; }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Build.Steps.Deploy;
+using Build.Extensions.Helm;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using CliWrap;

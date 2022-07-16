@@ -37,5 +37,7 @@ namespace Build.Steps.Build
     public string HelmRepositoryAddress { get; set; }
     public FileInfo SecretsFile { get; set; }
     public FileInfo ConfigFile { get; set; }
+    public string Namespace { get; set; }
+    public string ReleaseName { get; set; }
   }
 }

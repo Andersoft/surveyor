@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,14 +27,5 @@ public sealed class TransformVariables : AsyncFrostingTask<BuildContext>
       };
 
       await context.Transform(options);
-    
   }
-}
-
-public class TransformVariablesOptions
-{
-  public IDictionary<string, ICollection<string>> Arguments { get; set; }
-  public FileInfo SecretsFile { get; set; }
-  public string Destination { get; set; }
-  public FileInfo ConfigFile { get; set; }
 }

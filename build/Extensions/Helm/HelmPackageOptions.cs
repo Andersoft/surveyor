@@ -1,4 +1,4 @@
-﻿namespace Build;
+﻿namespace Build.Extensions.Helm;
 
 public class HelmPackageOptions
 {
