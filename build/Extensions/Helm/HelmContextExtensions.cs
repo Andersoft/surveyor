@@ -16,10 +16,10 @@ public static class HelmContextExtensions
 
   public static async Task<bool> TryDeployHelmChartAsync(this ICakeContext context, DeployHelmChartOptions options)
   {
-    context.Log.Information($"helm upgrade -n {options.Namespace} -f {options.ValuesFile} {options.Name} -i {options.Repository}/{options.ChartName}");
+    context.Log.Information($"helm upgrade -n {options.Namespace} -f {options.ValuesFile} -i {options.Name} {options.Repository}/{options.ChartName}");
 
     var result = await Cli.Wrap(BinaryName)
-      .WithArguments(new[] { "upgrade", $"-n {options.Namespace}", $"-f {options.ValuesFile}", $"{options.Name}","-i", $"{options.Repository}/{options.ChartName}" }, false)
+      .WithArguments(new[] { "upgrade", $"-n {options.Namespace}", $"-f {options.ValuesFile}", "-i", $"{options.Name}", $"{options.Repository}/{options.ChartName}" }, false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
       .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
       .ExecuteBufferedAsync();

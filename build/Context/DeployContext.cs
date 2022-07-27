@@ -18,5 +18,6 @@ public class DeployContext : CoreContext
     SecretsFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryLibrary, "appsettings.secrets.json"));
     NamespaceLabels = context.Arguments.GetArgument("namespace_labels");
     Namespace = context.Arguments.GetArgument("namespace");
+    ReleaseName = context.Arguments.GetArgument("project_name").ToLower();
   }
 }
