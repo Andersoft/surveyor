@@ -1,8 +1,8 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name:  {{ include "surveyor.namespace" . }}-gateway
-  namespace: {{ include "surveyor.namespace" . }}
+  name:  {{ include "service.namespace" . }}-gateway
+  namespace: {{ include "service.namespace" . }}
 spec: 
   selector:
     istio: ingressgateway
@@ -12,5 +12,5 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "{{ include "surveyor.namespace" . }}/*"
+    - "{{ include "service.namespace" . }}/*"
 

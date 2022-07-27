@@ -1,17 +1,17 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "surveyor.fullname" . }}
-  namespace: {{ include "surveyor.namespace" . }}
+  name: {{ include "service.fullname" . }}
+  namespace: {{ include "service.namespace" . }}
 spec:
   hosts:
-  - "{{ include "surveyor.fullname" . }}.k8.local"
+  - "{{ include "service.fullname" . }}.k8.local"
   gateways:
-  - "{{ include "surveyor.namespace" . }}/{{ include "surveyor.namespace" . }}-gateway"
+  - "{{ include "service.namespace" . }}/{{ include "service.namespace" . }}-gateway"
   http:
   - match:
     route:
     - destination:
-        host: "{{ include "surveyor.fullname" . }}"
+        host: "{{ include "service.fullname" . }}"
         port:
           number: 80

@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "surveyor.fullname" . }}
+  name: {{ include "service.fullname" . }}
   labels:
-    {{- include "surveyor.labels" . | nindent 4 }}
+    {{- include "service.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "surveyor.selectorLabels" . | nindent 6 }}
+      {{- include "service.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,13 +18,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "surveyor.selectorLabels" . | nindent 8 }}
+        {{- include "service.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "surveyor.serviceAccountName" . }}
+      serviceAccountName: {{ include "service.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -46,21 +46,21 @@ spec:
               path: /
               port: http
           volumeMounts:
-            - name: {{ include "surveyor.fullname" . }}-secrets
+            - name: {{ include "service.fullname" . }}-secrets
               mountPath: /app/appsettings.secrets.json
               subPath: appsettings.secrets.json
-            - name: {{ include "surveyor.fullname" . }}-configmap
+            - name: {{ include "service.fullname" . }}-configmap
               mountPath: /app/appsettings.config.json
               subPath: appsettings.json
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-        - name: {{ include "surveyor.fullname" . }}-secrets
+        - name: {{ include "service.fullname" . }}-secrets
           secret:
-            secretName: {{ include "surveyor.fullname" . }}-appsettings
-        - name: {{ include "surveyor.fullname" . }}-configmap
+            secretName: {{ include "service.fullname" . }}-appsettings
+        - name: {{ include "service.fullname" . }}-configmap
           configMap:
-            name: {{ include "surveyor.fullname" . }}-appsettings
+            name: {{ include "service.fullname" . }}-appsettings
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
