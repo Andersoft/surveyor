@@ -28,7 +28,7 @@ stages:
               "--password=$(password)", 
               "--app_version=$(version)",
               "--test='Secret Password: Kubernetes'",
-              "--target='Publish Image'"
+              "--target=Publish Image"
             )
             $projectVariables.variables.PSObject.Properties | where {$_.Value.value -ne $null} | forEach { $options+= "--$($_.Name)=$($_.Value.value)"  }
             .\build.ps1 @options
