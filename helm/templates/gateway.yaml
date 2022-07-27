@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/beta1
+kind: Gateway
+metadata:
+  name:  {{ include "surveyor.namespace" . }}-gateway
+  namespace: {{ include "surveyor.namespace" . }}
+spec: 
+  selector:
+    app: web-gateway
+  servers:
+  - port:
+      number: 8080
+      name: http
+      protocol: HTTP
+    hosts:
+    - "{{ include "surveyor.namespace" . }}/*"
+

@@ -16,5 +16,6 @@ public class DeployContext : CoreContext
   {
     ConfigFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryLibrary, "appsettings.json"));
     SecretsFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryLibrary, "appsettings.secrets.json"));
+    NamespaceLabels = context.Arguments.GetArgument("namespace_labels");
   }
 }
