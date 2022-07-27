@@ -7,10 +7,10 @@ variables:
 - group: devops
 - group: Surveyor
 - name: version
-  value: 0.1.1
+  value: 0.1.2
 
 stages:
-- stage: Dev
+- stage: Development
   jobs:
     - job: Build
       steps:
@@ -37,3 +37,19 @@ stages:
             testResultsFormat: 'VSTest'
             searchFolder: './artifacts/test-results/'
             testResultsFiles: '*.trx'
+    - job: Deployment
+      dependsOn: Build
+      condition: succeeded()
+      steps:
+        - powershell: |
+            echo "$(pat)" | az devops login --organization https://dev.azure.com/magnoxium/
+            $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft --group Surveyor | ConvertFrom-Json
+            $options = @( 
+              "--password=$(password)", 
+              "--app_version=$(version)",
+              "--test='Secret Password: Kubernetes'",
+              "--target=Deploy Helm Chart"
+            )
+            $projectVariables.variables.PSObject.Properties | where {$_.Value.value -ne $null} | forEach { $options+= "--$($_.Name)=$($_.Value.value)"  }
+            .\build.ps1 @options
+          displayName: 'Run Cake Deployment Script'
