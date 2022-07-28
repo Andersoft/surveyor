@@ -8,8 +8,7 @@ steps:
   - powershell: |
       echo "$(System.AccessToken)" | az devops login --organization $env:ENDPOINT_URL_SYSTEMVSSCONNECTION
       $projectVariables = az pipelines variable-group list --organization $env:ENDPOINT_URL_SYSTEMVSSCONNECTION --project $env:SYSTEM_TEAMPROJECT --group Surveyor | ConvertFrom-Json
-      $options = @()
+      $options = "${{ convertToJson(parameters.variables) }}" | ConvertFrom-Json
       $projectVariables.variables.PSObject.Properties | where {$_.Value.value -ne $null} | forEach { $options+= "--$($_.Name)=$($_.Value.value)"  }
-      write-host ${{ parameters.variables }}
       .\build.ps1 @options
     displayName: 'Run Cake Build Script'
