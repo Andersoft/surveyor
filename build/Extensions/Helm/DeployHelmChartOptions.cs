@@ -7,4 +7,5 @@ public class DeployHelmChartOptions
   public string ChartName { get; set; }
   public string ValuesFile { get; set; }
   public string Name { get; set; }
+  public string Version { get; set; }
 }

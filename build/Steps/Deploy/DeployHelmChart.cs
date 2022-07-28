@@ -22,7 +22,8 @@ public sealed class DeployHelmChart : AsyncFrostingTask<DeployContext>
       ChartName = context.ProjectName.ToLower(),
       Namespace = context.Namespace,
       Repository = context.HelmRepositoryName,
-      Name = context.ReleaseName
+      Name = context.ReleaseName,
+      Version = context.Version,
     };
 
     ;

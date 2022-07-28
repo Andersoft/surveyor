@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Build.Extensions.Docker;
 using Build.Steps.Deploy;
@@ -28,16 +29,17 @@ public static class HelmContextExtensions
   
   public static async Task<bool> TryDeployHelmChartAsync(this ICakeContext context, DeployHelmChartOptions options)
   {
-    context.Log.Information($"helm upgrade -n {options.Namespace} -f {options.ValuesFile} -i {options.Name} {options.Repository}/{options.ChartName}");
+    string[] arguments = new[] { "upgrade", $"-n {options.Namespace}",$"--version {options.Version}", $"-f {options.ValuesFile}", "-i", $"{options.Name}", $"{options.Repository}/{options.ChartName}"};
+    context.Log.Information(string.Join(" ", arguments));
 
     await Cli.Wrap(BinaryName)
-      .WithArguments(new[] { "upgrade", $"-n {options.Namespace}", $"-f {options.ValuesFile}", "-i", $"{options.Name}", $"{options.Repository}/{options.ChartName}", "--dry-run"}, false)
+      .WithArguments(arguments.Union(new[]{"--dry-run"}), false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
       .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
       .ExecuteBufferedAsync();
 
     var result = await Cli.Wrap(BinaryName)
-      .WithArguments(new[] { "upgrade", $"-n {options.Namespace}", $"-f {options.ValuesFile}", "-i", $"{options.Name}", $"{options.Repository}/{options.ChartName}" }, false)
+      .WithArguments(arguments, false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
       .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
       .ExecuteBufferedAsync();
