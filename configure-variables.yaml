@@ -10,8 +10,7 @@ steps:
       $projectVariables = az pipelines variable-group list --organization $env:ENDPOINT_URL_SYSTEMVSSCONNECTION --project $env:SYSTEM_TEAMPROJECT --group Surveyor | ConvertFrom-Json
       $options = @()
       $projectVariables.variables.PSObject.Properties | where {$_.Value.value -ne $null} | forEach { $options+= "--$($_.Name)=$($_.Value.value)"  }
-    displayName: 'Populate build variables'
-  - ${{ each value in parameters.variables }}:
-    - powershell: $options+= "--$($_.Name)={{ value }}"
-  - powershell: .\build.ps1 @options
+      ${{ each value in parameters.variables }}:
+        $options+= "--$($_.Name)={{ value }}"
+      .\build.ps1 @options
     displayName: 'Run Cake Build Script'
