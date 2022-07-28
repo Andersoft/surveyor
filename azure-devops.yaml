@@ -15,9 +15,9 @@ stages:
     - job: Build
       steps:
         - template: configure-version.yaml
-        - template: configure-variables.yaml
+        - template: configure-cake.yaml
           parameters:
-           variables: "--password=$(password), --app_version=$(version), --test='Secret Password: Kubernetes', --target=Publish Image"
+           variables: "--password=$(password), --app_version=$(version), --target=Publish Image"
         - task: PublishTestResults@2
           inputs:
             testResultsFormat: 'VSTest'
@@ -33,15 +33,6 @@ stages:
       condition: succeeded()
       steps:
         - template: configure-version.yaml
-        - powershell: |
-            echo "$(System.AccessToken)" | az devops login --organization $env:ENDPOINT_URL_SYSTEMVSSCONNECTION
-            $projectVariables = az pipelines variable-group list --organization $env:ENDPOINT_URL_SYSTEMVSSCONNECTION --project $env:SYSTEM_TEAMPROJECT --group Surveyor | ConvertFrom-Json
-            $options = @( 
-              "--password=$(password)", 
-              "--app_version=$(version)",
-              "--test='Secret Password: Kubernetes'",
-              "--target=Deploy Helm Chart"
-            )
-            $projectVariables.variables.PSObject.Properties | where {$_.Value.value -ne $null} | forEach { $options+= "--$($_.Name)=$($_.Value.value)"  }
-            .\build.ps1 @options
-          displayName: 'Run Cake Deployment Script'
+        - template: configure-cake.yaml
+          parameters:
+           variables: "--password=$(password), --app_version=$(version), --test='Secret Password: Kubernetes', --target=Deploy Helm Chart"        

@@ -11,4 +11,4 @@ steps:
       $options = "${{ parameters.variables }}" -split ","
       $projectVariables.variables.PSObject.Properties | where {$_.Value.value -ne $null} | forEach { $options+= "--$($_.Name)=$($_.Value.value)"  }
       .\build.ps1 @options
-    displayName: 'Run Cake Build Script'
+    displayName: 'Run Cake Script'
