@@ -53,6 +53,8 @@ stages:
             } else {
               Write-Host "##vso[build.updatebuildnumber]$(version)"
             }
+          displayName: 'Configure Version'
+        - powershell: |
             echo "$(pat)" | az devops login --organization https://dev.azure.com/magnoxium/
             $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft --group Surveyor | ConvertFrom-Json
             $options = @( 
