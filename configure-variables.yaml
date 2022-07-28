@@ -1,7 +1,7 @@
 parameters:
 - name: variables
   displayName: 'additional variables'
-  type: object
+  type: string
   
 
 steps:
