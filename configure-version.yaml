@@ -1,11 +1,6 @@
-parameters:
-- name: branch
-  displayName: Branch
-  type: string
-
 steps:
 - powershell: |
-    if("${{ parameters.branch }}" -ne "main" ) { 
+    if("$(Build.SourceBranchName)" -ne "main" ) { 
       Write-Host "##vso[task.setvariable variable=version]$(version)-$(Build.SourceBranchName).$(Build.BuildId)" 
     } else {
       Write-Host "##vso[build.updatebuildnumber]$(version)"
