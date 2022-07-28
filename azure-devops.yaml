@@ -16,7 +16,7 @@ stages:
       steps:
         - template: configure-version.yaml
         - template: configure-variables.yaml
-         parameters:
+          parameters:
            variables:
              - --password=$(password)
              - --app_version=$(version)
