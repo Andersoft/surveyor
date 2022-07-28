@@ -14,13 +14,7 @@ stages:
   jobs:
     - job: Build
       steps:
-        - powershell: |
-            if("$(Build.SourceBranchName)" -ne "main" ) { 
-              Write-Host "##vso[task.setvariable variable=version]$(version)-$(Build.SourceBranchName).$(Build.BuildId)" 
-            } else {
-              Write-Host "##vso[build.updatebuildnumber]$(version)"
-            }
-          displayName: 'Configure Version'
+        - template: configure-version.yaml
         - powershell: |
             echo "$(pat)" | az devops login --organization https://dev.azure.com/magnoxium/
             $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft --group Surveyor | ConvertFrom-Json
@@ -47,13 +41,7 @@ stages:
       dependsOn: Build
       condition: succeeded()
       steps:
-        - powershell: |
-            if("$(Build.SourceBranchName)" -ne "main" ) { 
-              Write-Host "##vso[task.setvariable variable=version]$(version)-$(Build.SourceBranchName).$(Build.BuildId)" 
-            } else {
-              Write-Host "##vso[build.updatebuildnumber]$(version)"
-            }
-          displayName: 'Configure Version'
+        - template: configure-version.yaml
         - powershell: |
             echo "$(pat)" | az devops login --organization https://dev.azure.com/magnoxium/
             $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft --group Surveyor | ConvertFrom-Json
