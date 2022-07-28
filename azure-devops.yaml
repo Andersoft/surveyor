@@ -16,7 +16,7 @@ stages:
       steps:
         - template: configure-version.yaml
         - powershell: |
-            echo "$(pat)" | az devops login --organization https://dev.azure.com/magnoxium/
+            echo "$(System.AccessToken)" | az devops login --organization https://dev.azure.com/magnoxium/
             $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft --group Surveyor | ConvertFrom-Json
             $options = @( 
               "--password=$(password)", 
@@ -43,7 +43,7 @@ stages:
       steps:
         - template: configure-version.yaml
         - powershell: |
-            echo "$(pat)" | az devops login --organization https://dev.azure.com/magnoxium/
+            echo "$(System.AccessToken)" | az devops login --organization https://dev.azure.com/magnoxium/
             $projectVariables = az pipelines variable-group list --organization https://dev.azure.com/magnoxium/ --project Andersoft --group Surveyor | ConvertFrom-Json
             $options = @( 
               "--password=$(password)", 
