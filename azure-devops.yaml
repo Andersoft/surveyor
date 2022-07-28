@@ -17,11 +17,7 @@ stages:
         - template: configure-version.yaml
         - template: configure-variables.yaml
           parameters:
-           variables:
-             - --password=$(password)
-             - --app_version=$(version)
-             - --test='Secret Password: Kubernetes'
-             - --target=Publish Image
+           variables: --password=$(password), --app_version=$(version), --test='Secret Password: Kubernetes', --target=Publish Image
         - task: PublishTestResults@2
           inputs:
             testResultsFormat: 'VSTest'
