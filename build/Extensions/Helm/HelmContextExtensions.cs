@@ -30,6 +30,12 @@ public static class HelmContextExtensions
   {
     context.Log.Information($"helm upgrade -n {options.Namespace} -f {options.ValuesFile} -i {options.Name} {options.Repository}/{options.ChartName}");
 
+    await Cli.Wrap(BinaryName)
+      .WithArguments(new[] { "upgrade", $"-n {options.Namespace}", $"-f {options.ValuesFile}", "-i", $"{options.Name}", $"{options.Repository}/{options.ChartName}", "--dry-run"}, false)
+      .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
+      .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
+      .ExecuteBufferedAsync();
+
     var result = await Cli.Wrap(BinaryName)
       .WithArguments(new[] { "upgrade", $"-n {options.Namespace}", $"-f {options.ValuesFile}", "-i", $"{options.Name}", $"{options.Repository}/{options.ChartName}" }, false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
