@@ -14,7 +14,8 @@ public static class HelmContextExtensions
 {
   const string BinaryName = "helm";
 
-  public static async Task<bool> TryUpdateHelmRepositoriesAsync(this ICakeContext context){
+  public static async Task<bool> TryUpdateHelmRepositoriesAsync(this ICakeContext context)
+  {
     context.Log.Information($"helm repo update");
 
     var result = await Cli.Wrap(BinaryName)
@@ -25,14 +26,25 @@ public static class HelmContextExtensions
 
     return result.ExitCode == 0;
   }
-  
+
   public static async Task<bool> TryDeployHelmChartAsync(this ICakeContext context, DeployHelmChartOptions options)
   {
-    string[] arguments = new[] { "upgrade", $"-n {options.Namespace}", $"-f {options.ValuesFile}", "-i", $"{options.Name}", $"{options.Repository}/{options.ChartName}"};
+    string[] arguments = new[]
+    {
+      "upgrade", 
+      $"-n {options.Namespace}", 
+      $"-f {options.ValuesFile}", 
+      "-i", 
+      $"{options.Name}", 
+      $"{options.Repository}/{options.ChartName}",
+      $"--set nameOverride={options.Name}",
+      $"--set namespace={options.Namespace}",
+      $"--set image.repository={options.ImageRepository}"
+    };
     context.Log.Information(string.Join(" ", arguments));
 
     await Cli.Wrap(BinaryName)
-      .WithArguments(arguments.Union(new[]{"--dry-run"}), false)
+      .WithArguments(arguments.Union(new[] { "--dry-run" }), false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
       .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
       .ExecuteBufferedAsync();
