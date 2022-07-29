@@ -30,11 +30,6 @@ stages:
             testResultsFormat: 'VSTest'
             searchFolder: './artifacts/test-results/'
             testResultsFiles: '*.trx'
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: './artifacts/helm/'
-            ArtifactName: 'helm'
-            publishLocation: 'Container'
     - job: Deployment
       dependsOn: Build
       condition: succeeded()
