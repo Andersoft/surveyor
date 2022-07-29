@@ -16,10 +16,9 @@ public class CoreContext : FrostingContext
     ProjectName = context.Arguments.GetArgument("project_name");
     SolutionPath = context.Arguments.GetArgument("solution_path");
     Tags = context.Arguments.GetArguments("tags");
-    HelmRepositoryName = context.Arguments.GetArgument("helm_repository_name");
+    
   }
 
   public string EntryLibrary { get; set; }
   public IEnumerable<string> Tags { get; set; }
-  public string HelmRepositoryName { get; set; }
 }

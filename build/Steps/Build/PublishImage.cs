@@ -7,7 +7,7 @@ using Cake.Frosting;
 namespace Build.Steps.Build;
 
 [TaskName("Publish Image")]
-[IsDependentOn(typeof(PublishHelmChart))]
+[IsDependentOn(typeof(AuthenticateDocker))]
 public sealed class PublishImage : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous
