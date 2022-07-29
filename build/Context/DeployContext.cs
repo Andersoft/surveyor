@@ -12,6 +12,7 @@ public class DeployContext : CoreContext
   public FileInfo ConfigFile { get; set; }
   public string HelmRepositoryAddress { get; set; }
   public string HelmRepositoryName { get; set; }
+  public string ChartName { get; set; }
 
   public DeployContext(ICakeContext context)
     : base(context)
@@ -20,6 +21,7 @@ public class DeployContext : CoreContext
     SecretsFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryLibrary, "appsettings.secrets.json"));
     NamespaceLabels = context.Arguments.GetArgument("namespace_labels");
     Namespace = context.Arguments.GetArgument("namespace");
+    ChartName = context.Arguments.GetArgument("chart_name");
     ReleaseName = context.Arguments.GetArgument("project_name").ToLower();
     HelmRepositoryName = context.Arguments.GetArgument("helm_repository_name");
     HelmRepositoryAddress = context.Arguments.GetArgument("helm_repository_address");

@@ -18,7 +18,7 @@ public sealed class DeployHelmChart : AsyncFrostingTask<DeployContext>
     var options = new DeployHelmChartOptions
     {
       ValuesFile = Path.Combine(Path.GetFullPath(context.SolutionPath), "artifacts", "settings", "override.yaml"),
-      ChartName = context.ProjectName.ToLower(),
+      ChartName = context.ChartName,
       Namespace = context.Namespace,
       Repository = context.HelmRepositoryName,
       Name = context.ReleaseName,
