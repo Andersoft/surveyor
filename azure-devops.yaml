@@ -3,6 +3,12 @@ name: $(version)-$(Build.SourceBranchName).$(Build.BuildId)
 pool:
   name: Minikube
 
+resources:
+  repositories:
+  - repository: templates
+    type: git
+    name: templates
+
 variables:
 - group: devops
 - group: Surveyor
@@ -14,10 +20,11 @@ stages:
   jobs:
     - job: Build
       steps:
-        - template: configure-version.yaml
-        - template: configure-cake.yaml
+        - template: configure-version.yaml@templates
+        - template: run-cake.yaml@templates
           parameters:
            variables: "--password=$(password), --app_version=$(version), --target=Publish Image"
+           library: Surveyor
         - task: PublishTestResults@2
           inputs:
             testResultsFormat: 'VSTest'
@@ -32,7 +39,8 @@ stages:
       dependsOn: Build
       condition: succeeded()
       steps:
-        - template: configure-version.yaml
-        - template: configure-cake.yaml
+        - template: configure-version.yaml@templates
+        - template: run-cake.yaml@templates
           parameters:
            variables: "--password=$(password), --app_version=$(version), --test='Secret Password: Kubernetes', --target=Deploy Helm Chart"        
+           library: Surveyor

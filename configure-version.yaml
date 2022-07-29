@@ -1,8 +1,0 @@
-steps:
-- powershell: |
-    if("$(Build.SourceBranchName)" -ne "main" ) { 
-      Write-Host "##vso[task.setvariable variable=version]$(version)-$(Build.SourceBranchName).$(Build.BuildId)" 
-    } else {
-      Write-Host "##vso[build.updatebuildnumber]$(version)"
-    }
-  displayName: 'Configure Version'
