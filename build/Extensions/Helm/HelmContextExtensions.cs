@@ -39,7 +39,8 @@ public static class HelmContextExtensions
       $"{options.Repository}/{options.ChartName}",
       $"--set nameOverride={options.Name}",
       $"--set namespace={options.Namespace}",
-      $"--set image.repository={options.ImageRepository}"
+      $"--set image.repository={options.ImageRepository}",
+      $"--set ingress.enabled={options.IngressEnabled}",
     };
     context.Log.Information(string.Join(" ", arguments));
 

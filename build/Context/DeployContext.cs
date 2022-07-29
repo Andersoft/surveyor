@@ -14,6 +14,7 @@ public class DeployContext : CoreContext
   public string HelmRepositoryName { get; set; }
   public string ChartName { get; set; }
   public string ImageRepository { get; set; }
+  public string IngressEnabled { get; set; }
 
   public DeployContext(ICakeContext context)
     : base(context)
@@ -27,5 +28,6 @@ public class DeployContext : CoreContext
     HelmRepositoryName = context.Arguments.GetArgument("helm_repository_name");
     HelmRepositoryAddress = context.Arguments.GetArgument("helm_repository_address");
     ImageRepository = context.Arguments.GetArgument("image_repository");
+    IngressEnabled = context.Arguments.GetArgument("ingress_enabled");
   }
 }

@@ -22,7 +22,8 @@ public sealed class DeployHelmChart : AsyncFrostingTask<DeployContext>
       Namespace = context.Namespace,
       Repository = context.HelmRepositoryName,
       Name = context.ReleaseName,
-      ImageRepository = context.ImageRepository
+      ImageRepository = context.ImageRepository,
+      IngressEnabled = context.IngressEnabled
     };
 
     if (await context.TryDeployHelmChartAsync(options) is false)

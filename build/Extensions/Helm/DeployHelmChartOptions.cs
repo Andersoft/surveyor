@@ -8,4 +8,5 @@ public class DeployHelmChartOptions
   public string ValuesFile { get; set; }
   public string Name { get; set; }
   public string ImageRepository { get; set; }
+  public string IngressEnabled { get; set; }
 }
