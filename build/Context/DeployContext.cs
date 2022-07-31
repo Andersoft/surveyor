@@ -16,12 +16,13 @@ public class DeployContext : CoreContext
   public string ImageRepository { get; set; }
   public string IngressEnabled { get; set; }
   public string Hostname { get; set; }
+  public string ConfigPath { get; set; }
 
   public DeployContext(ICakeContext context)
     : base(context)
   {
-    ConfigFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryPoint, "appsettings.json"));
-    SecretsFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryPoint, "appsettings.secrets.json"));
+    ConfigFile = new FileInfo(Path.Combine(ConfigPath, "appsettings.json"));
+    SecretsFile = new FileInfo(Path.Combine(ConfigPath, "appsettings.secrets.json"));
     NamespaceLabels = context.Arguments.GetArgument("namespace_labels");
     Namespace = context.Arguments.GetArgument("namespace");
     ChartName = context.Arguments.GetArgument("chart_name");
@@ -31,5 +32,6 @@ public class DeployContext : CoreContext
     ImageRepository = context.Arguments.GetArgument("image_repository");
     IngressEnabled = context.Arguments.GetArgument("ingress_enabled");
     Hostname = context.Arguments.GetArgument("service_hostname");
+    ConfigPath = context.Arguments.GetArgument("config_path");
   }
 }
