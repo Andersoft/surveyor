@@ -20,8 +20,8 @@ public class DeployContext : CoreContext
   public DeployContext(ICakeContext context)
     : base(context)
   {
-    ConfigFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryLibrary, "appsettings.json"));
-    SecretsFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryLibrary, "appsettings.secrets.json"));
+    ConfigFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryPoint, "appsettings.json"));
+    SecretsFile = new FileInfo(Path.Combine(SolutionPath, "src", EntryPoint, "appsettings.secrets.json"));
     NamespaceLabels = context.Arguments.GetArgument("namespace_labels");
     Namespace = context.Arguments.GetArgument("namespace");
     ChartName = context.Arguments.GetArgument("chart_name");

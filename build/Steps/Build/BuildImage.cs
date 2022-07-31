@@ -24,7 +24,7 @@ public sealed class BuildImage : AsyncFrostingTask<BuildContext>
       Repository = context.ProjectName.ToLower(),
       BuildArguments = new Dictionary<string, string>
       {
-        ["project"] = context.EntryLibrary
+        ["project"] = context.EntryPoint
       }
     };
 

@@ -9,8 +9,8 @@ namespace Build.Context
           : base(context)
         {
             Version = context.Arguments.GetArgument("app_version");
-            Username = context.Arguments.GetArgument("username");
-            Password = context.Arguments.GetArgument("password");
+            Username = context.Arguments.GetArgument("docker_username");
+            Password = context.Arguments.GetArgument("docker_password");
             Tags = context.Arguments.GetArguments("tags");
         }
 
