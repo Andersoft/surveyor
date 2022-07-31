@@ -43,12 +43,6 @@ public static class HelmContextExtensions
     };
     context.Log.Information(string.Join(" ", arguments));
 
-    await Cli.Wrap(BinaryName)
-      .WithArguments(arguments.Union(new[] { "--dry-run" }), false)
-      .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
-      .WithStandardErrorPipe(PipeTarget.ToDelegate(context.Log.Error))
-      .ExecuteBufferedAsync();
-
     var result = await Cli.Wrap(BinaryName)
       .WithArguments(arguments, false)
       .WithStandardOutputPipe(PipeTarget.ToDelegate(context.Log.Information))
