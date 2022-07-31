@@ -12,13 +12,7 @@ public class CoreContext : FrostingContext
   public CoreContext(ICakeContext context)
     : base(context)
   {
-    EntryPoint = context.Arguments.GetArgument("entry_point");
     ProjectName = context.Arguments.GetArgument("project_name");
-    SolutionPath = context.Arguments.GetArgument("solution_path");
-    Tags = context.Arguments.GetArguments("tags");
-    
+    SolutionPath = context.Arguments.GetArgument("solution_path");    
   }
-
-  public string EntryPoint { get; set; }
-  public IEnumerable<string> Tags { get; set; }
 }
