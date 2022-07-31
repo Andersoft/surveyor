@@ -11,19 +11,18 @@ namespace Build.Steps.Deploy;
 [IsDependentOn(typeof(TransformVariables))]
 public sealed class CreateNamespace : AsyncFrostingTask<DeployContext>
 {
-    // Tasks can be asynchronous
-    public override async Task RunAsync(DeployContext context)
+  public override async Task RunAsync(DeployContext context)
+  {
+    var options = new NamespaceOptions
     {
-      var options = new NamespaceOptions
-      {
-        Name = context.Namespace,
-        Overwrite = true,
-        Value = context.NamespaceLabels
-      };
+      Name = context.Namespace,
+      Overwrite = true,
+      Value = context.NamespaceLabels
+    };
 
-      if (await context.CreateNamespace(options) is false)
-      {
-        throw new Exception("Failed create namespace");
-      }
+    if (await context.CreateNamespace(options) is false)
+    {
+      throw new Exception("Failed create namespace");
+    }
   }
 }

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Build.Steps.Deploy;
-using Cake.Core;
+﻿using Cake.Core;
 
 namespace Build.Context
 {

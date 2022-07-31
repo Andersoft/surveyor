@@ -11,7 +11,6 @@ namespace Build.Steps.Deploy;
 [IsDependentOn(typeof(CreateNamespace))]
 public sealed class AddHelmRepository : AsyncFrostingTask<DeployContext>
 {
-  // Tasks can be asynchronous
   public override async Task RunAsync(DeployContext context)
   {
     var options = new HelmRepositoryOptions

@@ -10,7 +10,6 @@ namespace Build.Steps.Deploy;
 [IsDependentOn(typeof(AddHelmRepository))]
 public sealed class UpdateHelmRepo : AsyncFrostingTask<DeployContext>
 {
-  // Tasks can be asynchronous
   public override async Task RunAsync(DeployContext context)
   {
     if (await context.TryUpdateHelmRepositoriesAsync() is false)

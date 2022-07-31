@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Build.Context;
 using Build.Extensions.Helm;
-using Build.Extensions.Kubectl;
 using Cake.Frosting;
 
 namespace Build.Steps.Deploy;
@@ -12,7 +11,6 @@ namespace Build.Steps.Deploy;
 [IsDependentOn(typeof(UpdateHelmRepo))]
 public sealed class DeployHelmChart : AsyncFrostingTask<DeployContext>
 {
-  // Tasks can be asynchronous
   public override async Task RunAsync(DeployContext context)
   {
     var options = new DeployHelmChartOptions
@@ -23,7 +21,8 @@ public sealed class DeployHelmChart : AsyncFrostingTask<DeployContext>
       Repository = context.HelmRepositoryName,
       Name = context.ReleaseName,
       ImageRepository = context.ImageRepository,
-      IngressEnabled = context.IngressEnabled
+      IngressEnabled = context.IngressEnabled,
+      Hostname = context.Hostname
     };
 
     if (await context.TryDeployHelmChartAsync(options) is false)

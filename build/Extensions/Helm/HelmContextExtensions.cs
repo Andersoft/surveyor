@@ -1,8 +1,6 @@
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Build.Extensions.Docker;
-using Build.Steps.Deploy;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using CliWrap;
@@ -39,6 +37,7 @@ public static class HelmContextExtensions
       $"{options.Repository}/{options.ChartName}",
       $"--set nameOverride={options.Name}",
       $"--set namespace={options.Namespace}",
+      $"--set hostname={options.Hostname}",
       $"--set image.repository={options.ImageRepository}",
       $"--set ingress.enabled={options.IngressEnabled}",
     };

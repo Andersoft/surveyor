@@ -9,4 +9,5 @@ public class DeployHelmChartOptions
   public string Name { get; set; }
   public string ImageRepository { get; set; }
   public string IngressEnabled { get; set; }
+  public string Hostname { get; set; }
 }

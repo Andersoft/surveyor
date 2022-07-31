@@ -11,7 +11,6 @@ namespace Build.Steps.Build;
 [IsDependentOn(typeof(CleanSolution))]
 public sealed class RunTests : AsyncFrostingTask<BuildContext>
 {
-  // Tasks can be asynchronous
   public override async Task RunAsync(BuildContext context)
   {
     var options = new DockerBuildOptions
