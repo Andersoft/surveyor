@@ -8,7 +8,7 @@ using Cake.Frosting;
 namespace Build.Steps.Build;
 
 [TaskName("Build Dockerfile")]
-[IsDependentOn(typeof(ConfigureDirectories))]
+[IsDependentOn(typeof(CleanSolution))]
 public sealed class RunTests : AsyncFrostingTask<BuildContext>
 {
   // Tasks can be asynchronous

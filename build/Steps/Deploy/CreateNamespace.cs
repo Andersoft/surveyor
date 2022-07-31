@@ -18,7 +18,7 @@ public sealed class CreateNamespace : AsyncFrostingTask<DeployContext>
       {
         Name = context.Namespace,
         Overwrite = true,
-        Value = context.NamespaceLabels //"istio-injection=enable"
+        Value = context.NamespaceLabels
       };
 
       if (await context.CreateNamespace(options) is false)

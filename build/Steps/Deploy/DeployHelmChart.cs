@@ -9,7 +9,7 @@ using Cake.Frosting;
 namespace Build.Steps.Deploy;
 
 [TaskName("Deploy Helm Chart")]
-[IsDependentOn(typeof(AddHelmRepository))]
+[IsDependentOn(typeof(UpdateHelmRepo))]
 public sealed class DeployHelmChart : AsyncFrostingTask<DeployContext>
 {
   // Tasks can be asynchronous
