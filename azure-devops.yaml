@@ -13,7 +13,7 @@ variables:
 - group: devops
 - group: Surveyor
 - name: version
-  value: 0.3.0
+  value: 0.4.0
 
 stages:
 - stage: Development
