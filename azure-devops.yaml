@@ -23,7 +23,7 @@ stages:
         - template: configure-version.yaml@templates
         - template: run-cake.yaml@templates
           parameters:
-           variables: "--password=$(password), --app_version=$(version), --target=Publish Image"
+           variables: "--docker_password=$(docker_password), --app_version=$(version), --target=Publish Image"
            library: Surveyor
         - task: PublishTestResults@2
           inputs:
