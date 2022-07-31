@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Cake.Core;
+﻿using Cake.Core;
 using Cake.Frosting;
 
 namespace Build.Context;

@@ -32,6 +32,5 @@ public class DeployContext : CoreContext
     ImageRepository = context.Arguments.GetArgument("image_repository");
     IngressEnabled = context.Arguments.GetArgument("ingress_enabled");
     Hostname = context.Arguments.GetArgument("service_hostname");
-    
   }
 }
