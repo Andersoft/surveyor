@@ -13,7 +13,7 @@ variables:
 - group: devops
 - group: Surveyor
 - name: version
-  value: 0.2.0
+  value: 0.3.0
 
 stages:
 - stage: Development
@@ -37,5 +37,5 @@ stages:
         - template: configure-version.yaml@templates
         - template: run-cake.yaml@templates
           parameters:
-           variables: "--password=$(password), --app_version=$(version), --test='Secret Password: Kubernetes', --target=Deploy Helm Chart"        
+           variables: "--app_version=$(version), --target=Deploy Helm Chart"
            library: Surveyor
