@@ -3,9 +3,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 RUN mkdir /app
 WORKDIR /app
 
+ARG image_folder
 ARG assembly_name
 
-COPY artifacts/publish/${assembly_name}/. /app
+COPY ${image_folder}/. /app
 WORKDIR /app
 
 ENV _exe="$assembly_name.dll"
