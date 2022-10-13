@@ -5,7 +5,7 @@ WORKDIR /app
 
 ARG assembly_name
 
-COPY artifacts/images/${assembly_name}/. /app
+COPY artifacts/publish/${assembly_name}/. /app
 WORKDIR /app
 
 ENV _exe="$assembly_name.dll"
